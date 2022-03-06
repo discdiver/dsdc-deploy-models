@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% block head %}
+    <title> {% block title %} The app I just thought of {% endblock %} </title>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet" media="screen">
+    {% endblock %}
+</head>
+
+
+<body>
+    <div class="container">
+        {% include 'navbar.html' %}
+
+        {% block content %}
+        {% endblock %}
+
+        <h1> This is User {{you}}</h1>
+
+        <h2>This is the base template talking</h2>
+
+        {% block footer %}
+        {% endblock %}
+    </div>
+
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
