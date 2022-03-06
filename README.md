@@ -6,3 +6,5 @@
 
 
 Presentation slides available [here](presentation/Deploy%20your%20models%20faster.pdf).
+
+Python 3.9.7 was used for these examples. Check the [requirements.txt](requirements.txt) file for the package versions.
