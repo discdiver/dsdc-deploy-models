@@ -24,15 +24,15 @@ def load_pens() -> pd.DataFrame:
     df_pens = pd.read_csv(
         "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv"
     )
-    return df_pens.fillna(
-        -1.01
-    )  # json can't handle NaNs, should probably fill smarter or drop
+    return df_pens.fillna(-1.01)
+    # json can't handle NaNs, creating sentinel value
+    # could impute or drop, but this is just for demo purposes
 
 
 @app.get("/df")
-async def pens_data():
-    df_no_nans = load_pens()
-    return df_no_nans
+async def pens_data() -> pd.DataFrame:
+    """display the data frame"""
+    return load_pens()
 
 
 def make_plot(df: pd.DataFrame) -> plotly.graph_objs.Figure:

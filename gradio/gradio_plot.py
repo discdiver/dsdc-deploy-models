@@ -6,7 +6,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def plot_pens(alpha):
+def plot_pens():
+    """plot penguins using matplotlib"""  # plotly doesn't work as of 2.8.7, targeted for 2.9
+
     df_pens = pd.read_csv(
         "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv"
     )
@@ -21,7 +23,8 @@ iface = gr.Interface(
     inputs=["checkbox"],
     outputs=["plot"],
     title="Scatterplot of Palmer Penguins",
-    description="Let's talk pens.",
+    description="Let's talk pens. Click to see a plot.",
     article="Talk more about Penguins here, shall we?",
     theme="peach",
-).launch()  # share=True, auth=('jeff', 'pw'))
+    live=True,  # live reloads
+).launch(auth=("jeff", "pw"))
