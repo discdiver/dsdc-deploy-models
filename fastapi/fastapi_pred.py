@@ -15,7 +15,7 @@ app = FastAPI()
 
 # BASE_DIR = Path("./").resolve().parent
 
-# app.mount("/static", StaticFiles(directory=Path(BASE_DIR, "static")), name="static")
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
@@ -29,7 +29,7 @@ class User(BaseModel):
 
 
 users = [
-    dict(username="bob", email="bob@bob.com", disable=False),
+    dict(username="bruno", email="bruno@notalk.com", disable=False),
     dict(username="barb", email="barb@barb.com", disable=True),
 ]
 
@@ -45,11 +45,11 @@ def home(request: Request, username: str):
                     return "user not enabled"
 
                 return templates.TemplateResponse(
-                    "home.html", {"request": request, "you": user["username"]}
+                    "home.html", {"request": request, "usr": user["username"]}
                 )
     except Exception:
-        logging.log(1, Exception)
-    return "Sorry, no such user."
+        logger.log(5, Exception)  # fix so outputs print into file
+        return f"{Exception} or Sorry, no such user."
 
 
 if __name__ == "__main__":

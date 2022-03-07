@@ -31,7 +31,7 @@ def load_pens() -> pd.DataFrame:
 
 @app.get("/df")
 async def pens_data() -> pd.DataFrame:
-    """display the data frame"""
+    """return the penguins data frame as json"""
     return load_pens()
 
 
@@ -53,7 +53,7 @@ px_plot = make_plot(load_pens())
 
 @app.get("/plot")
 async def plot() -> HTMLResponse:
-    """return a plotly plot when queried"""
+    """return a plotly plot as html when queried"""
     return HTMLResponse(px_plot.to_html())
     # fig.to_json() # for deployment in another web framework
 

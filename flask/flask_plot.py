@@ -1,12 +1,11 @@
 # Flask with plotly express
 
-from flask import Flask
-from flask.templating import Jinja2Templates
+import flask
 import pandas as pd
 import plotly.express as px
 import plotly
 
-app = Flask()
+app = flask.Flask(__name__)
 
 
 @app.get("/")
@@ -24,8 +23,7 @@ def load_pens() -> pd.DataFrame:
 
 @app.get("/df")
 async def pens_data():
-    df_no_nans = load_pens()
-    return df_no_nans
+    return load_pens().to_json()  # can't return a df directly, must turn into json
 
 
 def make_plot(df: pd.DataFrame) -> plotly.graph_objs.Figure:
@@ -46,10 +44,6 @@ px_plot = make_plot(load_pens())
 
 @app.get("/plot")
 def plot():
-    """return a plotly plot"""
+    """return a plotly plot"""  # works same as in fastapi
     return px_plot.to_html()
     # fig.to_json() # for deployment in another web framework
-
-
-if __name__ == "__main__":
-    flask.run("fastapi_hello:app", reload=True)

@@ -1,17 +1,17 @@
 import gradio as gr
 
+
 def greet(name: str, is_morning: bool, temperature: int) -> tuple[str, str]:
     """give greeting and temperature based on user input
-    
+
     Args:
         name: user's name
         is_morning: whether it is morning or not
-    
+
     Returns:
         greeting: a greeting with saluation and temp F
         celsius: temp C
     """
-
 
     salutation = "Good morning" if is_morning else "Good evening"
     greeting = f"{salutation} {name}. It is {temperature} degrees F today"
@@ -21,11 +21,11 @@ def greet(name: str, is_morning: bool, temperature: int) -> tuple[str, str]:
 
 
 iface = gr.Interface(
-    fn=greet, 
-    article = "Demo",  # p tag under the inputs - anyway to control location?
+    fn=greet,
+    article="Demo",  # p tag under the inputs - anyway to control location?
     inputs=[
-        "text", 
-        "checkbox", 
+        "text",
+        "checkbox",
         gr.inputs.Slider(0, 100),
     ],
     outputs=["text", "number"],
@@ -39,11 +39,8 @@ iface = gr.Interface(
             font-size: 1.3em;
         }
         """,
-   
-  
-    ).launch(share=True)
+).launch(share=True)
 
 
-    # iface.launch(share=True)  #share creates a 72 hour live link
-
-    # run with python my_file_name.py
+# iface.launch(share=True)  #share creates a 72 hour live link
+# run with python my_file_name.py

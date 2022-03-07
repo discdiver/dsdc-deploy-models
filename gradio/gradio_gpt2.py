@@ -10,11 +10,11 @@ gr.Interface.load(
             background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(7,51,99,1) 70%, rgba(6,3,17,1) 100%); 
         }
         .title {
-            color: white !important;
+            color: white;
         }
-        .article {
-            color: white !important;  
-            font-size: 1.3em;
-        }
+     
         """,
+    interpretation="default",  # shap fails for text box
 ).launch()
+
+# css makes a nice gradient
