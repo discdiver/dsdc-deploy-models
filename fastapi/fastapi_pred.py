@@ -14,13 +14,15 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
-@app.post("/form")
-async def form():
+@app.get("/form")
+async def form(request: Request):
     """form for getting data"""
-    return templates.TemplateResponse("form.html")
+    return templates.TemplateResponse(
+        "form.html", context={"request": request}  # "result": result}
+    )
 
 
-@app.post("/predict/")
+@app.post("/form")
 async def make_prediction(request: Request):
     """accept form submission and handle it"""
 
