@@ -7,23 +7,8 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-# may need below for Docker change BASE_DIR
-# from pathlib import Path
-
-# BASE_DIR = Path("./").resolve().parent
-
-
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
-
-
-class User(BaseModel):
-    username: str
-    email: str
-    first_name: str = None
-    last_name: str = None
-    disabled: bool = None
-
 
 users = [
     dict(username="bruno", email="bruno@notalk.com", img=True, disable=False),
@@ -35,6 +20,7 @@ users = [
 @app.get("/users/{username}", response_class=HTMLResponse)
 async def home(request: Request, username: str):
     """lookup user and send info to webpage"""
+
     for user in users:
         if username == user["username"]:
             person = user
@@ -53,4 +39,12 @@ async def home(request: Request, username: str):
 
 
 if __name__ == "__main__":
-    uvicorn.run("fastapi_pred:app", debug=True, reload=True)
+    uvicorn.run("fastapi_pydantic:app", debug=True, reload=True)
+
+
+# class User(BaseModel):
+#     username: str
+#     email: str
+#     first_name: str = None
+#     last_name: str = None
+#     disabled: bool = None
