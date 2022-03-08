@@ -1,12 +1,9 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 from pydantic import BaseModel
-from loguru import logger
-
-logger.add("file_{time}.log", level="INFO", enqueue=True, rotation="1 month")
 
 app = FastAPI()
 
@@ -29,27 +26,30 @@ class User(BaseModel):
 
 
 users = [
-    dict(username="bruno", email="bruno@notalk.com", disable=False),
-    dict(username="barb", email="barb@barb.com", disable=True),
+    dict(username="bruno", email="bruno@notalk.com", img=True, disable=False),
+    dict(username="barb", email="barb@barb.com", img=False, disable=False),
+    dict(username="bo", email="bo@bo.com", img=False, disable=True),
 ]
 
 
 @app.get("/users/{username}", response_class=HTMLResponse)
-def home(request: Request, username: str):
+async def home(request: Request, username: str):
+    """lookup user and send info to webpage"""
+    for user in users:
+        if username == user["username"]:
+            person = user
+
+            if person["disable"] == True:
+                return "user not enabled"
     try:
-        for user in users:
+        person  # a match was found
+    except NameError:
+        raise HTTPException(status_code=404, detail="User not found")
 
-            if user["username"] == username:
-                person = user["username"]
-                if user["disable"] == True:
-                    return "user not enabled"
-
-                return templates.TemplateResponse(
-                    "home.html", {"request": request, "usr": user["username"]}
-                )
-    except Exception:
-        logger.log(5, Exception)  # fix so outputs print into file
-        return f"{Exception} or Sorry, no such user."
+    return templates.TemplateResponse(
+        "home.html",
+        {"request": request, "usr": person["username"], "img": person["img"]},
+    )
 
 
 if __name__ == "__main__":
