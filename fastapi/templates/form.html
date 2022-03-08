@@ -2,11 +2,12 @@
 <html>
 
 <head>
-    <title>Predict-O-Matic</title>
+    <title>Predict home values in Ames, Iowa</title>
 </head>
 
 <body>
-    <form action="/submit">
+    <h1>Enter characteristics of your property in Ames, Iowa</h1>
+    <form method='POST' enctype="multipart/form-data">
         <p>
             <label for="OverallQual">Overall House Quality</label><br>
             <input type="number" name="OverallQual">
@@ -23,7 +24,7 @@
             <label for="LotArea">Lot Area</label><br>
             <input type="number" name="LotArea">
         </p>
-        <p><button type="submit">Submit</button></p>
+        <p><button type="submit" value="Submit">Submit</button></p>
     </form>
 </body>
 

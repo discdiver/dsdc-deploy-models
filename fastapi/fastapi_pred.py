@@ -1,12 +1,13 @@
 import pickle
+from urllib import response
 import uvicorn
-from fastapi import FastAPI, Form, Request, HTTPException
+import numpy as np
+from fastapi import FastAPI, Depends, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from schemas import FeaturesForm
 
-import numpy as np
 
 app = FastAPI()
 
@@ -14,32 +15,36 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
-@app.get("/form")
-async def form(request: Request):
+@app.get("/form", response_class=HTMLResponse)
+async def features_form(request: Request):
     """form for getting data"""
     return templates.TemplateResponse("form.html", context={"request": request})
 
 
-@app.post("/form")
-async def make_prediction(request: Request):
-    """accept form submission and handle it"""
-
-    user_input = request.args
+@app.post("/form", response_class=HTMLResponse)
+async def make_prediction(
+    request: Request, user_input: FeaturesForm = Depends(FeaturesForm.as_form)
+):
+    """accept form submission and make prediction"""
 
     X_test = np.array(
         [
-            int(user_input["OverallQual"]),
-            int(user_input["FullBath"]),
-            int(user_input["GarageArea"]),
-            int(user_input["LotArea"]),
+            int(user_input.OverallQual),
+            int(user_input.FullBath),
+            int(user_input.GarageArea),
+            int(user_input.LotArea),
         ]
     ).reshape(1, -1)
 
-    model = pickle.load(open("assets/model.pkl", "rb"))
-    pred = model.predict(X_test)
-    pred = pred[0]
+    with open("assets/model.pkl", "rb") as f:
+        model = pickle.load(f)
 
-    return templates.TemplateResponse("results.html", prediction=pred)
+    pred = model.predict(X_test)
+    pred = max(0, pred[0])  # make sure no negative predicted values
+
+    return templates.TemplateResponse(
+        "results.html", context={"request": request, "prediction": pred}
+    )  # pred instead of request
 
 
 if __name__ == "__main__":
