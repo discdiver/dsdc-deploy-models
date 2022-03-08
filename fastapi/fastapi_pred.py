@@ -17,9 +17,7 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/form")
 async def form(request: Request):
     """form for getting data"""
-    return templates.TemplateResponse(
-        "form.html", context={"request": request}  # "result": result}
-    )
+    return templates.TemplateResponse("form.html", context={"request": request})
 
 
 @app.post("/form")
