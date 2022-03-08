@@ -40,11 +40,11 @@ async def make_prediction(
         model = pickle.load(f)
 
     pred = model.predict(X_test)
-    pred = max(0, pred[0])  # make sure no negative predicted values
+    pred = max(0, pred[0])  # ensure no negative predicted values
 
     return templates.TemplateResponse(
         "results.html", context={"request": request, "prediction": pred}
-    )  # pred instead of request
+    )
 
 
 if __name__ == "__main__":
